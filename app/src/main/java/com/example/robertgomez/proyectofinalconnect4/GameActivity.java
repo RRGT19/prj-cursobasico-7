@@ -90,7 +90,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        Button resetButton = (Button) findViewById(R.id.reset_button);
+        Button resetButton = findViewById(R.id.reset_button);
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,21 +238,21 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
                         ImageView cellFrame = frontBoardRowArray[i].findViewById(cellFrameArray[j]);
 
-                        if (cellFrameColorTemp.equals("blue")) {
+                        switch (cellFrameColorTemp) {
+                            case "blue":
+                                cellFrame.setImageResource(R.drawable.cell_frame_gray);
+                                finalcellFrameColor = "gray";
+                                break;
 
-                            cellFrame.setImageResource(R.drawable.cell_frame_gray);
-                            finalcellFrameColor = "gray";
+                            case "gray":
+                                cellFrame.setImageResource(R.drawable.cell_frame_green);
+                                finalcellFrameColor = "green";
+                                break;
 
-                        } else if (cellFrameColorTemp.equals("gray")) {
-
-                            cellFrame.setImageResource(R.drawable.cell_frame_green);
-                            finalcellFrameColor = "green";
-
-                        } else {
-
-                            cellFrame.setImageResource(R.drawable.cell_frame_blue);
-                            finalcellFrameColor = "blue";
-
+                                default:
+                                    cellFrame.setImageResource(R.drawable.cell_frame_blue);
+                                    finalcellFrameColor = "blue";
+                                    break;
                         }
                     }
                 }
@@ -445,9 +445,10 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         if (vibrate) {
             // Vibrate the phone
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            boolean hasVibrator = vibrator.hasVibrator();
 
-            // Check if the device has a vibrator
-            if (vibrator.hasVibrator()) {
+            // Check if the device has a vibrator to avoid 'java.lang.NullPointerException'
+            if (hasVibrator) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     vibrator.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
@@ -467,7 +468,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      */
     private void writeToSharedPreferences(int key) {
 
-        int wins = 0;
+        int wins;
         if (key == R.string.sharedPref_red_wins_key) {
             wins = readFromSharedPreferences(R.string.sharedPref_red_wins_key);
         } else {
@@ -485,8 +486,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @return The value saved
      */
     private int readFromSharedPreferences(int key) {
-        int numberWins = sharedPrefStatistics.getInt(getString(key), 0);
-        return numberWins;
+        return sharedPrefStatistics.getInt(getString(key), 0);
     }
 
     /**

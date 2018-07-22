@@ -6,7 +6,7 @@ public class Board {
     private int numColumns;
     private int numRows;
     public boolean hasWinner;
-    public Cell[][] cells;
+    private Cell[][] cells;
     private static boolean isRed;
 
     /**
