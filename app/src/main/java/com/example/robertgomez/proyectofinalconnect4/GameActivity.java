@@ -407,7 +407,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         animator.start();*/
 
         // Check if there is 4 views together
-        if (board.checkForWin(col, row)) {
+        if (board.checkForWin()) {
             win();
         } else {
             changeTurn();

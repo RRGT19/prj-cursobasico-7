@@ -22,13 +22,23 @@ public class Board {
         }
     }
 
-    // Definition of the players
+    /**
+     * Definition of the players
+     */
     public enum Turn {
         RED, YELLOW
     }
 
+    /**
+     * Keep track of the current turn
+     */
     public Turn turn;
 
+    /**
+     * Constructor
+     * @param cols Number of columns
+     * @param rows Number of rows
+     */
     public Board(int cols, int rows) {
         numColumns = cols;
         numRows = rows;
@@ -36,6 +46,9 @@ public class Board {
         reset();
     }
 
+    /**
+     * Resets all the game
+     */
     public void reset() {
         hasWinner = false;
 
@@ -52,6 +65,11 @@ public class Board {
         }
     }
 
+    /**
+     * Search an available row
+     * @param col The column to search
+     * @return The row
+     */
     public int lastAvailableRow(int col) {
         for (int row = numRows - 1; row >= 0; row--) {
             if (cells[col][row].empty) {
@@ -61,10 +79,18 @@ public class Board {
         return -1;
     }
 
+    /**
+     * Save in the records that this cell is occupied
+     * @param col The column
+     * @param row The row
+     */
     public void occupyCell(int col, int row) {
         cells[col][row].setPlayer(turn);
     }
 
+    /**
+     * Toggle the turns between players
+     */
     public void toggleTurn() {
         if (turn == Turn.RED) {
             turn = Turn.YELLOW;
@@ -73,7 +99,11 @@ public class Board {
         }
     }
 
-    public boolean checkForWin(int c, int r) {
+    /**
+     * Check if there is 4 views together
+     * @return A boolean
+     */
+    public boolean checkForWin() {
         // Vertical
         for (int col = 0; col < numColumns; col++) {
             if (isContiguous(turn, 0, 1, col, 0, 0) || isContiguous(turn, 1, 1, col, 0, 0) || isContiguous(turn, -1, 1, col, 0, 0)) {
@@ -92,6 +122,16 @@ public class Board {
         return false;
     }
 
+    /**
+     * Determines if the views are contiguous
+     * @param player The current player
+     * @param dirX X position
+     * @param dirY Y position
+     * @param col The column
+     * @param row The row
+     * @param count Number of views together
+     * @return A boolean
+     */
     private boolean isContiguous(Turn player, int dirX, int dirY, int col, int row, int count) {
         if (count >= 4) {
             return true;
