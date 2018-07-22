@@ -13,7 +13,7 @@
         android:layout_marginRight="4dp"
         android:layout_alignParentRight="true"
         android:drawableLeft="@drawable/icon_reset_button"
-        android:text="Reset" />
+        android:text="@string/reset" />
 
     <LinearLayout
         android:id="@+id/turnIndicator"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="5dp"
-            android:text="Turn:"
+            android:text="@string/turn"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -50,7 +50,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:text="Winner!"
+        android:text="@string/winner"
         android:textSize="40sp"
         android:textStyle="bold" />
 
@@ -86,7 +86,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/game_board_front"
+        android:id="@+id/game_table_front"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
