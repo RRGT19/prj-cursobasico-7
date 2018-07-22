@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/tonality"
+        android:title="Tonality"
+        android:icon="@drawable/icon_tonality_background"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/colorFrame"
+        android:title="colorFrame"
+        android:icon="@drawable/icon_color_frame"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/statistics"
+        android:title="Statistics"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/settings"
+        android:title="Settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/about"
+        android:title="About"
+        app:showAsAction="never" />
+
+</menu>

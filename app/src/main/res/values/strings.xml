@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Connect 4</string>
+
+    <!-- - - - - - - - - - - - - - - -
+          - Used by Preferences  -
+          - - - - - - - - - - - - - - - -->
+
+    <!-- Label for the play sound checkbox preference -->
+    <string name="pref_play_sound_label">Play Sound</string>
+    <!-- Key name for storing audio in SharedPreferences -->
+    <string name="pref_play_sound_key" translatable="false">play_sound</string>
+
+    <!-- Label for the vibrate checkbox preference -->
+    <string name="pref_vibrate_label">Vibrate</string>
+    <!-- Key name for storing vibrate in SharedPreferences -->
+    <string name="pref_vibrate_key" translatable="false">vibrate</string>
+
+    <!-- Label for the color preference -->
+    <string name="pref_first_player_label">Who Starts?</string>
+    <!-- Key name for color preference in SharedPreferences -->
+    <string name="pref_color_key" translatable="false">color</string>
+
+    <!-- Label for red color preference -->
+    <string name="pref_red_label">Red</string>
+    <!-- Label for blue color preference -->
+    <string name="pref_yellow_label">Yellow</string>
+
+    <!-- Value in SharedPreferences for red color option -->
+    <string name="pref_color_red_value" translatable="false">red</string>
+    <!-- Value in SharedPreferences for yellow color option -->
+    <string name="pref_color_yellow_value" translatable="false">yellow</string>
+
+    <!-- Summary for Checkboxes -->
+    <string name="pref_play_true">On</string>
+    <string name="pref_play_false">Off</string>
+
+    <!-- PreferenceCategory Titles -->
+    <string name="pref_functions_title">Functions</string>
+    <string name="pref_player_title">Player</string>
+
+    <!-- Statistics SharedPreferences -->
+    <string name="sharedPref_red_wins_key">red_wins</string>
+    <string name="sharedPref_yellow_wins_key">yellow_wins</string>
+
+</resources>

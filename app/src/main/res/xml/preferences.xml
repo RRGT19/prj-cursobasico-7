@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_functions_title">
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_play_sound_default"
+            android:icon="@drawable/icon_pref_play_sound"
+            android:key="@string/pref_play_sound_key"
+            android:summaryOff="@string/pref_play_false"
+            android:summaryOn="@string/pref_play_true"
+            android:title="@string/pref_play_sound_label" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_vibrate_default"
+            android:icon="@drawable/icon_pref_vibrate"
+            android:key="@string/pref_vibrate_key"
+            android:summaryOff="@string/pref_play_false"
+            android:summaryOn="@string/pref_play_true"
+            android:title="@string/pref_vibrate_label" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_player_title">
+        <ListPreference
+            android:summary="%s"
+            android:defaultValue="@string/pref_color_red_value"
+            android:icon="@drawable/icon_pref_first_player"
+            android:entries="@array/pref_color_option_labels"
+            android:entryValues="@array/pref_color_option_values"
+            android:key="@string/pref_color_key"
+            android:title="@string/pref_first_player_label" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frontBoardRowContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="-2dp"
+    android:clipChildren="false">
+
+    <ImageView
+        android:id="@+id/cellFrame1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".17"
+        android:adjustViewBounds="true"
+        android:src="@drawable/cell_frame_blue" />
+
+    <ImageView
+        android:id="@+id/cellFrame2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".17"
+        android:adjustViewBounds="true"
+        android:src="@drawable/cell_frame_blue" />
+
+    <ImageView
+        android:id="@+id/cellFrame3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".17"
+        android:adjustViewBounds="true"
+        android:src="@drawable/cell_frame_blue" />
+
+    <ImageView
+        android:id="@+id/cellFrame4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".17"
+        android:adjustViewBounds="true"
+        android:src="@drawable/cell_frame_blue" />
+
+    <ImageView
+        android:id="@+id/cellFrame5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".17"
+        android:adjustViewBounds="true"
+        android:src="@drawable/cell_frame_blue" />
+
+    <ImageView
+        android:id="@+id/cellFrame6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".17"
+        android:adjustViewBounds="true"
+        android:src="@drawable/cell_frame_blue" />
+
+    <ImageView
+        android:id="@+id/cellFrame7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".17"
+        android:adjustViewBounds="true"
+        android:src="@drawable/cell_frame_blue" />
+</LinearLayout>
