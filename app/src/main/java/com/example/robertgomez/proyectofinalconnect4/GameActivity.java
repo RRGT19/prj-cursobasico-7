@@ -398,6 +398,22 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             playSound(R.raw.drop_sound);
         }
 
+        // Check if the table is full, if it is then, there is a draw
+        if (table.isTableFull()) {
+            winnerTextView.setVisibility(View.VISIBLE);
+            winnerTextView.setText(getResources().getString(R.string.draw));
+
+            // Check the user preferences to activate or not the sound
+            if (playSound) {
+                playSound(R.raw.draw_sound);
+            }
+
+            // Check the user preferences to activate or not the vibration
+            if (vibrate) {
+                vibrate();
+            }
+        }
+
     }
 
     /**
@@ -423,21 +439,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
         // Check the user preferences to activate or not the vibration
         if (vibrate) {
-            // Vibrate the phone
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            boolean hasVibrator = vibrator.hasVibrator();
-
-            // Check if the device has a vibrator to avoid 'java.lang.NullPointerException'
-            if (hasVibrator) {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
-                } else {
-                    // Deprecated in API 26
-                    vibrator.vibrate(500);
-                }
-
-            }
+            vibrate();
         }
 
     }
@@ -484,6 +486,26 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                 dropSound.reset();
             }
         });
+    }
+
+    /**
+     * Vibrate the phone
+     */
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        boolean hasVibrator = vibrator.hasVibrator();
+
+        // Check if the device has a vibrator to avoid 'java.lang.NullPointerException'
+        if (hasVibrator) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                // Deprecated in API 26
+                vibrator.vibrate(500);
+            }
+
+        }
     }
 
     /**

@@ -80,6 +80,22 @@ public class Table {
     }
 
     /**
+     * Check if the table is full
+     * @return A boolean
+     */
+    public boolean isTableFull() {
+        boolean isFull = true;
+        for (int col = 0; col < numColumns; col++) {
+            for (int row = 0; row < numRows; row++) {
+                if (cells[col][row].empty) {
+                    isFull = false;
+                }
+            }
+        }
+        return isFull;
+    }
+
+    /**
      * Save in the records that this cell is occupied
      * @param col The column
      * @param row The row

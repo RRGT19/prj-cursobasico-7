@@ -4,6 +4,7 @@
     <string name="reset">Reset</string>
     <string name="turn">Turn:</string>
     <string name="winner">Winner!</string>
+    <string name="draw">Draw!</string>
 
     <!-- - - - - - - - - - - - - - - -
           - Used by Preferences  -
