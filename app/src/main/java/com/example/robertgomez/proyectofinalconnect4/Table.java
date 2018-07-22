@@ -2,7 +2,7 @@ package com.example.robertgomez.proyectofinalconnect4;
 
 import android.content.Context;
 
-public class Board {
+public class Table {
     private int numColumns;
     private int numRows;
     public boolean hasWinner;
@@ -39,7 +39,7 @@ public class Board {
      * @param cols Number of columns
      * @param rows Number of rows
      */
-    public Board(int cols, int rows) {
+    public Table(int cols, int rows) {
         numColumns = cols;
         numRows = rows;
         cells = new Cell[cols][rows];
@@ -106,7 +106,7 @@ public class Board {
     public boolean checkForWin() {
         // Vertical
         for (int col = 0; col < numColumns; col++) {
-            if (isContiguous(turn, 0, 1, col, 0, 0) || isContiguous(turn, 1, 1, col, 0, 0) || isContiguous(turn, -1, 1, col, 0, 0)) {
+            if (isTogether(turn, 0, 1, col, 0, 0) || isTogether(turn, 1, 1, col, 0, 0) || isTogether(turn, -1, 1, col, 0, 0)) {
                 hasWinner = true;
                 return true;
             }
@@ -114,7 +114,7 @@ public class Board {
 
         // Horizontal
         for (int row = 0; row < numRows; row++) {
-            if (isContiguous(turn, 1, 0, 0, row, 0) || isContiguous(turn, 1, 1, 0, row, 0) || isContiguous(turn, -1, 1, numColumns - 1, row, 0)) {
+            if (isTogether(turn, 1, 0, 0, row, 0) || isTogether(turn, 1, 1, 0, row, 0) || isTogether(turn, -1, 1, numColumns - 1, row, 0)) {
                 hasWinner = true;
                 return true;
             }
@@ -123,7 +123,7 @@ public class Board {
     }
 
     /**
-     * Determines if the views are contiguous
+     * Determines if the views are together
      * @param player The current player
      * @param dirX X position
      * @param dirY Y position
@@ -132,7 +132,7 @@ public class Board {
      * @param count Number of views together
      * @return A boolean
      */
-    private boolean isContiguous(Turn player, int dirX, int dirY, int col, int row, int count) {
+    private boolean isTogether(Turn player, int dirX, int dirY, int col, int row, int count) {
         if (count >= 4) {
             return true;
         }
@@ -143,9 +143,9 @@ public class Board {
         Cell cell = cells[col][row];
 
         if (cell.player == player) {
-            return isContiguous(player, dirX, dirY, col + dirX, row + dirY, count + 1);
+            return isTogether(player, dirX, dirY, col + dirX, row + dirY, count + 1);
         } else {
-            return isContiguous(player, dirX, dirY, col + dirX, row + dirY, 0);
+            return isTogether(player, dirX, dirY, col + dirX, row + dirY, 0);
         }
     }
 }

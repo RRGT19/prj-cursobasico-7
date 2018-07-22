@@ -1,5 +1,6 @@
 package com.example.robertgomez.proyectofinalconnect4;
 
+import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,9 +34,9 @@ import android.widget.Toast;
 public class GameActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private ImageView[][] cells;
-    private View boardView;
-    private Board board;
-    private TextView winnerText;
+    private View tableView;
+    private Table table;
+    private TextView winnerTextView;
     private ImageView turnIndicatorImageView;
     private static int NUM_ROWS = 6;
     private static int NUM_COLS = 7;
@@ -63,12 +65,12 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
         setupSharedPreferences();
 
-        board = new Board(NUM_COLS, NUM_ROWS);
-        boardView = findViewById(R.id.game_board);
+        table = new Table(NUM_COLS, NUM_ROWS);
+        tableView = findViewById(R.id.gameTable);
 
         buildCells();
 
-        boardView.setOnTouchListener(new View.OnTouchListener() {
+        tableView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
@@ -90,7 +92,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        Button resetButton = findViewById(R.id.reset_button);
+        Button resetButton = findViewById(R.id.resetButton);
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,10 +101,10 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        turnIndicatorImageView = findViewById(R.id.turn_indicator_image_view);
+        turnIndicatorImageView = findViewById(R.id.turnIndicatorImageView);
         turnIndicatorImageView.setImageResource(resourceForTurn());
-        winnerText = findViewById(R.id.winner_text);
-        winnerText.setVisibility(View.GONE);
+        winnerTextView = findViewById(R.id.winnerTextView);
+        winnerTextView.setVisibility(View.GONE);
     }
 
     /**
@@ -150,7 +152,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @param sharedPreferences The SharedPreferences that received the change
      */
     private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
-        board.setColor(getApplicationContext(), sharedPreferences.getString(getString(R.string.pref_color_key),
+        table.setColor(getApplicationContext(), sharedPreferences.getString(getString(R.string.pref_color_key),
                 getString(R.string.pref_color_red_value)));
     }
 
@@ -197,27 +199,27 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         switch (item.getItemId()) {
             case R.id.tonality:
                 // Get background color code
-                ColorDrawable viewColor = (ColorDrawable) boardView.getBackground();
+                ColorDrawable viewColor = (ColorDrawable) tableView.getBackground();
                 int currentColorCode = viewColor.getColor();
 
                 // Toggle the background color
                 if (currentColorCode == ContextCompat.getColor(getApplicationContext(), R.color.colorBlack)) {
-                    boardView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
+                    tableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
                 } else {
-                    boardView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
+                    tableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
                 }
 
                 return true;
 
             case R.id.colorFrame:
 
-                LinearLayout[] frontBoardRowArray = new LinearLayout[] {
-                        findViewById(R.id.front_board_row1),
-                        findViewById(R.id.front_board_row2),
-                        findViewById(R.id.front_board_row3),
-                        findViewById(R.id.front_board_row4),
-                        findViewById(R.id.front_board_row5),
-                        findViewById(R.id.front_board_row6)
+                LinearLayout[] frontTableRowArray = new LinearLayout[] {
+                        findViewById(R.id.front_table_row1),
+                        findViewById(R.id.front_table_row2),
+                        findViewById(R.id.front_table_row3),
+                        findViewById(R.id.front_table_row4),
+                        findViewById(R.id.front_table_row5),
+                        findViewById(R.id.front_table_row6)
                 };
 
                 int[] cellFrameArray = new int[] {
@@ -232,11 +234,11 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
                 String cellFrameColorTemp = cellFrameColor;
                 String finalcellFrameColor = null;
-                for (int i = 0; i < frontBoardRowArray.length; i++) {
+                for (int i = 0; i < frontTableRowArray.length; i++) {
 
                     for (int j = 0; j < cellFrameArray.length; j++) {
 
-                        ImageView cellFrame = frontBoardRowArray[i].findViewById(cellFrameArray[j]);
+                        ImageView cellFrame = frontTableRowArray[i].findViewById(cellFrameArray[j]);
 
                         switch (cellFrameColorTemp) {
                             case "blue":
@@ -326,7 +328,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     }
 
     /**
-     * Build the cells of the board
+     * Build the cells of the table
      */
     private void buildCells() {
         cells = new ImageView[NUM_ROWS][NUM_COLS];
@@ -335,7 +337,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
             // Save each view in a ViewGroup
             // getChildAt(int index): Returns the view at the specified position in the group
-            ViewGroup row = (ViewGroup) ((ViewGroup) boardView).getChildAt(r);
+            ViewGroup row = (ViewGroup) ((ViewGroup) tableView).getChildAt(r);
 
             // Allows each child to draw outside of its own bounds, within the parent
             row.setClipChildren(false);
@@ -356,11 +358,11 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     private void drop(int col) {
 
         // Check if there is a winner already
-        if (board.hasWinner)
+        if (table.hasWinner)
             return;
 
         // Search an available row
-        int row = board.lastAvailableRow(col);
+        int row = table.lastAvailableRow(col);
 
         // Check if the row is full
         if (row == -1)
@@ -378,36 +380,14 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         // Sets a drawable as the content of this view
         cell.setImageResource(resourceForTurn());
 
-        // Animation that controls the position of the view
-        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, Math.abs(move));
-
-        // Amount of time (in milliseconds) for the animation to run
-        anim.setDuration(850);
-
-        // The transformation that this animation performed will persist when it is finished
-        anim.setFillAfter(true);
-
-        // Apply the animation to the view
-        cell.startAnimation(anim);
+        // Apply animation to the view
+        cell.animate().translationY(0).setInterpolator(new BounceInterpolator()).start();
 
         // Save in the records that this cell is occupied
-        board.occupyCell(col, row);
-
-        /*ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                cell.setAlpha((Float) animation.getAnimatedValue());
-            }
-        });
-
-        animator.setDuration(500);
-        animator.setRepeatMode(ValueAnimator.REVERSE);
-        animator.setRepeatCount(-1);
-        animator.start();*/
+        table.occupyCell(col, row);
 
         // Check if there is 4 views together
-        if (board.checkForWin()) {
+        if (table.checkForWin()) {
             win();
         } else {
             changeTurn();
@@ -426,7 +406,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     private void win() {
 
         // Check which player has won
-        if (board.turn == Board.Turn.RED) {
+        if (table.turn == Table.Turn.RED) {
             delayedDialog();
             writeToSharedPreferences(R.string.sharedPref_red_wins_key);
         } else {
@@ -434,7 +414,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             writeToSharedPreferences(R.string.sharedPref_yellow_wins_key);
         }
 
-        winnerText.setVisibility(View.VISIBLE);
+        winnerTextView.setVisibility(View.VISIBLE);
 
         // Check the user preferences to activate or not the sound
         if (playSound) {
@@ -554,7 +534,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * Toggle the turns between players
      */
     private void changeTurn() {
-        board.toggleTurn();
+        table.toggleTurn();
         turnIndicatorImageView.setImageResource(resourceForTurn());
     }
 
@@ -576,7 +556,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @return The drawable
      */
     private int resourceForTurn() {
-        switch (board.turn) {
+        switch (table.turn) {
             case RED:
                 return R.drawable.red;
             case YELLOW:
@@ -590,7 +570,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @return The drawable
      */
     private int winnerResourceForTurn() {
-        switch (board.turn) {
+        switch (table.turn) {
             case RED:
                 return R.drawable.red_won;
             case YELLOW:
@@ -604,8 +584,8 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      */
     private void reset() {
 
-        board.reset();
-        winnerText.setVisibility(View.GONE);
+        table.reset();
+        winnerTextView.setVisibility(View.GONE);
         turnIndicatorImageView.setImageResource(resourceForTurn());
         for (int r = 0; r < NUM_ROWS; r++) {
             for (int c = 0; c < NUM_COLS; c++) {
