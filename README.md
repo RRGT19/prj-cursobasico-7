@@ -11,7 +11,7 @@ In this project I recreated the game **Connect 4** using what I learned over the
 * [Android Studio](https://developer.android.com/studio/) - Development environment (IDE)
 * Java - Programming language
 
-## Acknowledgments
+## Thanks
 
 * Thanks to the teacher and students for the support
 * Thanks to Altice Academy for giving me the opportunity
