@@ -46,6 +46,12 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     private boolean playSound;
     private boolean vibrate;
 
+    // Keep track the last move for the undo function
+    private Button undoButton;
+    private int colForUndo;
+    private int rowForUndo;
+    private ImageView cellForUndo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +97,25 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         });
 
         Button resetButton = findViewById(R.id.resetButton);
+        undoButton = findViewById(R.id.undoButton);
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 reset();
+            }
+        });
+
+        undoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cellForUndo != null) {
+                    cellForUndo.setImageResource(android.R.color.transparent);
+                    table.undoCell(colForUndo, rowForUndo);
+                    changeTurn();
+                    cellForUndo = null;
+                    undoButton.setEnabled(false);
+                }
             }
         });
 
@@ -384,6 +404,12 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         // Save in the records that this cell is occupied
         table.occupyCell(col, row);
 
+        // Keep track the last move for the undo function
+        colForUndo = col;
+        rowForUndo = row;
+        cellForUndo = cells[row][col];
+        undoButton.setEnabled(true);
+
         // Check if there is 4 views together
         if (table.checkForWin()) {
             win();
@@ -398,6 +424,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
         // Check if the table is full, if it is then, there is a draw
         if (table.isTableFull()) {
+            undoButton.setEnabled(false);
             winnerTextView.setVisibility(View.VISIBLE);
             winnerTextView.setText(getResources().getString(R.string.draw));
 
@@ -606,6 +633,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     private void reset() {
 
         table.reset();
+        undoButton.setEnabled(false);
         winnerTextView.setVisibility(View.GONE);
         turnIndicatorImageView.setImageResource(resourceForTurn());
         for (int r = 0; r < NUM_ROWS; r++) {

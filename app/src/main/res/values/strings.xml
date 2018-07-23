@@ -2,6 +2,7 @@
     <string name="app_name">Connect 4</string>
 
     <string name="reset">Reset</string>
+    <string name="undo">Undo</string>
     <string name="turn">Turn:</string>
     <string name="winner">Winner!</string>
     <string name="draw">Draw!</string>

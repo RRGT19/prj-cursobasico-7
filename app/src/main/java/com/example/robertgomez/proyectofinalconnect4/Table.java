@@ -105,6 +105,15 @@ public class Table {
     }
 
     /**
+     * Undo the last move
+     * @param col The column
+     * @param row The row
+     */
+    public void undoCell(int col, int row) {
+        cells[col][row] = new Cell();
+    }
+
+    /**
      * Toggle the turns between players
      */
     public void toggleTurn() {
