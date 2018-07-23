@@ -17,18 +17,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ImageView logoConnect4ImageView = findViewById(R.id.logoConnect4ImageView);
+        Button playButton = findViewById(R.id.playButton);
+        Button settingsButton = findViewById(R.id.settingsButton);
 
         // Using Glide to show a GIF
         Glide.with(this)
                 .load(R.drawable.logo_connect4)
                 .into(logoConnect4ImageView);
 
-        Button playButton = findViewById(R.id.playButton);
-
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });

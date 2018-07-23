@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/logoConnect4ImageView"
@@ -24,11 +24,20 @@
         <Button
             android:id="@+id/playButton"
             android:layout_width="220dp"
-            android:drawableLeft="@drawable/icon_play_button"
             android:layout_height="wrap_content"
             android:layout_below="@id/logoConnect4ImageView"
             android:layout_centerInParent="true"
-            android:text="Play" />
+            android:drawableLeft="@drawable/icon_play_button"
+            android:text="@string/play" />
+
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/playButton"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@drawable/icon_settings_button"
+            android:text="@string/settings" />
 
     </RelativeLayout>
 
