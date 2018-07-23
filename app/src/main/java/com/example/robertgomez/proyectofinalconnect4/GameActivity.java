@@ -1,6 +1,7 @@
 package com.example.robertgomez.proyectofinalconnect4;
 
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +24,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -431,6 +434,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         }
 
         winnerTextView.setVisibility(View.VISIBLE);
+        winnerTextView.setText(getResources().getString(R.string.winner));
 
         // Check the user preferences to activate or not the sound
         if (playSound) {
