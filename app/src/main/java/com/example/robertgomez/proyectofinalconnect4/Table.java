@@ -15,11 +15,7 @@ public class Table {
      * @param colorKey The key of the preference
      */
     public static void setColor(Context context, String colorKey) {
-        if (colorKey.equals(context.getString(R.string.pref_color_red_value))) {
-            isRed = true;
-        } else {
-            isRed = false;
-        }
+        isRed = (colorKey.equals(context.getString(R.string.pref_color_red_value)));
     }
 
     /**
