@@ -38,7 +38,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     private ImageView turnIndicatorImageView;
     private static int NUM_ROWS = 6;
     private static int NUM_COLS = 7;
-    private String cellFrameColor = "blue"; // Keep the current cell frame color
+    private String cellFrameColor; // Keep the current cell frame color
     private SharedPreferences sharedPrefStatistics;
     private SharedPreferences.Editor editorSharedPrefStatistics;
 
@@ -66,8 +66,6 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         // The last parameter, false, tells the PreferenceManager to only apply the default values
         // the first time the method is called. (This way it will not overwrite the settings at a later time)
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-        setupSharedPreferences();
 
         table = new Table(NUM_COLS, NUM_ROWS);
         tableView = findViewById(R.id.gameTable);
@@ -123,6 +121,10 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         turnIndicatorImageView.setImageResource(resourceForTurn());
         winnerTextView = findViewById(R.id.winnerTextView);
         winnerTextView.setVisibility(View.GONE);
+
+        cellFrameColor = getString(R.string.pref_blue_table_color_value);
+
+        setupSharedPreferences();
     }
 
     /**
@@ -140,6 +142,12 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         // Set the Vibrate function
         setVibrate(sharedPreferences.getBoolean(getString(R.string.pref_vibrate_key),
                 getResources().getBoolean(R.bool.pref_vibrate_default)));
+
+        // Set the Background Color
+        loadBackgroundColorFromPreferences(sharedPreferences);
+
+        // Set the Table Color
+        loadTableColorFromPreferences(sharedPreferences);
 
         // Set the Color function of the first player
         loadColorFromPreferences(sharedPreferences);
@@ -166,6 +174,33 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     }
 
     /**
+     * Set the Background Color
+     * @param sharedPreferences The SharedPreferences that received the change
+     */
+    private void loadBackgroundColorFromPreferences(SharedPreferences sharedPreferences) {
+        String backgroundColor;
+        backgroundColor = sharedPreferences.getString(getString(R.string.pref_background_color_key),
+                getString(R.string.pref_white_background_color_value));
+
+        if (backgroundColor.equals(getString(R.string.pref_white_background_color_value)))
+            tableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
+
+        else
+            tableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
+    }
+
+    /**
+     * Set the Table Color
+     * @param sharedPreferences The SharedPreferences that received the change
+     */
+    private void loadTableColorFromPreferences(SharedPreferences sharedPreferences) {
+        String tableColor;
+        tableColor = sharedPreferences.getString(getString(R.string.pref_table_color_key),
+                getString(R.string.pref_blue_table_color_value));
+        setTableColor(tableColor, true);
+    }
+
+    /**
      * Set the Color function of the first player
      * @param sharedPreferences The SharedPreferences that received the change
      */
@@ -189,6 +224,14 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         } else if (key.equals(getString(R.string.pref_vibrate_key))) {
 
             setVibrate(sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_vibrate_default)));
+
+        } else if (key.equals(getString(R.string.pref_background_color_key))) {
+
+            loadBackgroundColorFromPreferences(sharedPreferences);
+
+        } else if (key.equals(getString(R.string.pref_table_color_key))) {
+
+            loadTableColorFromPreferences(sharedPreferences);
 
         } else if (key.equals(getString(R.string.pref_color_key))) {
 
@@ -231,52 +274,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
             case R.id.colorFrame:
 
-                LinearLayout[] frontTableRowArray = new LinearLayout[] {
-                        findViewById(R.id.front_table_row1),
-                        findViewById(R.id.front_table_row2),
-                        findViewById(R.id.front_table_row3),
-                        findViewById(R.id.front_table_row4),
-                        findViewById(R.id.front_table_row5),
-                        findViewById(R.id.front_table_row6)
-                };
-
-                int[] cellFrameArray = new int[] {
-                        R.id.cellFrame1,
-                        R.id.cellFrame2,
-                        R.id.cellFrame3,
-                        R.id.cellFrame4,
-                        R.id.cellFrame5,
-                        R.id.cellFrame6,
-                        R.id.cellFrame7
-                };
-
-                String cellFrameColorTemp = cellFrameColor;
-                String finalcellFrameColor = null;
-                for (int i = 0; i < frontTableRowArray.length; i++) {
-
-                    for (int j = 0; j < cellFrameArray.length; j++) {
-
-                        ImageView cellFrame = frontTableRowArray[i].findViewById(cellFrameArray[j]);
-
-                        switch (cellFrameColorTemp) {
-                            case "blue":
-                                cellFrame.setImageResource(R.drawable.cell_frame_gray);
-                                finalcellFrameColor = "gray";
-                                break;
-
-                            case "gray":
-                                cellFrame.setImageResource(R.drawable.cell_frame_green);
-                                finalcellFrameColor = "green";
-                                break;
-
-                                default:
-                                    cellFrame.setImageResource(R.drawable.cell_frame_blue);
-                                    finalcellFrameColor = "blue";
-                                    break;
-                        }
-                    }
-                }
-                cellFrameColor = finalcellFrameColor;
+                setTableColor(cellFrameColor, false);
 
                 return true;
 
@@ -343,6 +341,73 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setTableColor(String cellFrameColor, Boolean isToSet) {
+        LinearLayout[] frontTableRowArray = new LinearLayout[] {
+                findViewById(R.id.front_table_row1),
+                findViewById(R.id.front_table_row2),
+                findViewById(R.id.front_table_row3),
+                findViewById(R.id.front_table_row4),
+                findViewById(R.id.front_table_row5),
+                findViewById(R.id.front_table_row6)
+        };
+
+        int[] cellFrameArray = new int[] {
+                R.id.cellFrame1,
+                R.id.cellFrame2,
+                R.id.cellFrame3,
+                R.id.cellFrame4,
+                R.id.cellFrame5,
+                R.id.cellFrame6,
+                R.id.cellFrame7
+        };
+
+        String finalCellFrameColor = "";
+        for (int i = 0; i < frontTableRowArray.length; i++) {
+
+            for (int j = 0; j < cellFrameArray.length; j++) {
+
+                ImageView cellFrame = frontTableRowArray[i].findViewById(cellFrameArray[j]);
+
+                if (isToSet) { // If it's to set the color from SharedPreferences
+
+                    if (cellFrameColor.equals(getString(R.string.pref_blue_table_color_value)))
+                        cellFrame.setImageResource(R.drawable.cell_frame_blue);
+
+                    else if (cellFrameColor.equals(getString(R.string.pref_gray_table_color_value)))
+                        cellFrame.setImageResource(R.drawable.cell_frame_gray);
+
+                    else
+                        cellFrame.setImageResource(R.drawable.cell_frame_green);
+
+                } else { // If it's to set the color from Action Bar
+
+                    if (this.cellFrameColor.equals(getString(R.string.pref_blue_table_color_value))) {
+
+                        cellFrame.setImageResource(R.drawable.cell_frame_gray);
+                        finalCellFrameColor = getString(R.string.pref_gray_table_color_value);
+
+                    } else if (this.cellFrameColor.equals(getString(R.string.pref_gray_table_color_value))) {
+
+                        cellFrame.setImageResource(R.drawable.cell_frame_green);
+                        finalCellFrameColor = getString(R.string.pref_green_table_color_value);;
+
+                    } else {
+
+                        cellFrame.setImageResource(R.drawable.cell_frame_blue);
+                        finalCellFrameColor = getString(R.string.pref_blue_table_color_value);
+
+                    }
+
+                }
+            }
+        }
+
+        if (isToSet)
+            this.cellFrameColor = cellFrameColor;
+        else
+            this.cellFrameColor = finalCellFrameColor;
     }
 
     /**

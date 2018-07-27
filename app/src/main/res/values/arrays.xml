@@ -10,4 +10,26 @@
         <item>@string/pref_color_red_value</item>
         <item>@string/pref_color_yellow_value</item>
     </array>
+
+    <array name="pref_background_color_option_labels">
+        <item>@string/pref_white_background_color_label</item>
+        <item>@string/pref_black_background_color_label</item>
+    </array>
+
+    <array name="pref_background_color_option_values">
+        <item>@string/pref_white_background_color_value</item>
+        <item>@string/pref_black_background_color_value</item>
+    </array>
+
+    <array name="pref_table_color_option_labels">
+        <item>@string/pref_blue_table_color_label</item>
+        <item>@string/pref_gray_table_color_label</item>
+        <item>@string/pref_green_table_color_label</item>
+    </array>
+
+    <array name="pref_table_color_option_values">
+        <item>@string/pref_blue_table_color_value</item>
+        <item>@string/pref_gray_table_color_value</item>
+        <item>@string/pref_green_table_color_value</item>
+    </array>
 </resources>

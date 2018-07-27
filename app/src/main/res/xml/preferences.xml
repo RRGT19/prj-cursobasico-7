@@ -19,14 +19,34 @@
             android:title="@string/pref_vibrate_label" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/pref_environment_title">
+        <ListPreference
+            android:defaultValue="@string/pref_white_background_color_value"
+            android:entries="@array/pref_background_color_option_labels"
+            android:entryValues="@array/pref_background_color_option_values"
+            android:icon="@drawable/icon_tonality_background_black"
+            android:key="@string/pref_background_color_key"
+            android:summary="%s"
+            android:title="@string/pref_background_color_label" />
+
+        <ListPreference
+            android:defaultValue="@string/pref_blue_table_color_value"
+            android:entries="@array/pref_table_color_option_labels"
+            android:entryValues="@array/pref_table_color_option_values"
+            android:icon="@drawable/icon_color_frame_black"
+            android:key="@string/pref_table_color_key"
+            android:summary="%s"
+            android:title="@string/pref_table_color_label" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/pref_player_title">
         <ListPreference
-            android:summary="%s"
             android:defaultValue="@string/pref_color_red_value"
-            android:icon="@drawable/icon_pref_first_player"
             android:entries="@array/pref_color_option_labels"
             android:entryValues="@array/pref_color_option_values"
+            android:icon="@drawable/icon_pref_first_player"
             android:key="@string/pref_color_key"
+            android:summary="%s"
             android:title="@string/pref_first_player_label" />
     </PreferenceCategory>
 
