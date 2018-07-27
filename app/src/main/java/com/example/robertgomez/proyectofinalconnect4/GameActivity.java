@@ -404,6 +404,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
+        // Save the new current color
         if (isToSet)
             this.cellFrameColor = cellFrameColor;
         else
