@@ -13,7 +13,7 @@ In this project I have recreated the game **Connect 4** using what I learned ove
 * XML - Extensible Markup Language
 
 ## Screenshots
-![MainActivity](http://oi64.tinypic.com/rh07yq.jpg "MainActivity")
+![MainActivity](http://oi67.tinypic.com/97qo7q.jpg "MainActivity")
 ![GameActivity](http://oi63.tinypic.com/24dlz77.jpg "GameActivity")
 ![GameActivity](http://oi63.tinypic.com/301pzli.jpg "GameActivity")
 ![GameActivity](http://oi63.tinypic.com/2i0vrr7.jpg "GameActivity")
