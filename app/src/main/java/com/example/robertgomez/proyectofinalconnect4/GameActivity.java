@@ -29,50 +29,81 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+
 public class GameActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private ImageView[][] cells;
-    private View tableView;
-    private Table table;
-    private TextView winnerTextView;
-    private ImageView turnIndicatorImageView;
-    private static int NUM_ROWS = 6;
-    private static int NUM_COLS = 7;
-    private String cellFrameColor; // Keep the current cell frame color
-    private SharedPreferences sharedPrefStatistics;
-    private SharedPreferences.Editor editorSharedPrefStatistics;
+    private static final int NUM_ROWS = 6;
+    private static final int NUM_COLS = 7;
+
+    private ImageView[][] mCells;
+    private View mTableView;
+    private Table mTable;
+    private TextView mWinnerTextView;
+    private ImageView mTurnIndicatorImageView;
+    private String mCellFrameColor; // Keep the current cell frame color
+    private SharedPreferences mSharedPrefStatistics;
+    private SharedPreferences.Editor mEditorSharedPrefStatistics;
 
     // Determines whether each of these should be activated
-    private boolean playSound;
-    private boolean vibrate;
+    private boolean mPlaySound;
+    private boolean mVibrate;
 
     // Keep track the last move for the undo function
-    private Button undoButton;
-    private int colForUndo;
-    private int rowForUndo;
-    private ImageView cellForUndo;
+    private Button mUndoButton;
+    private int mColForUndo;
+    private int mRowForUndo;
+    private ImageView mCellForUndo;
+
+    // AdMob
+    private InterstitialAd mInterstitialAd;
+    private int mNumberOfPlays = 0;
+    private static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"; // Sample
+    private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"; // Sample
+    private static final int MIN_PLAYS_NEEDED_ADMOB = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        // AdMob
+        MobileAds.initialize(this, ADMOB_APP_ID);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(ADMOB_AD_UNIT_ID);
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        // Loads a new interstitial after displaying the previous one
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial
+                mInterstitialAd.loadAd(new AdRequest.Builder()
+                        .addTestDevice(AdRequest.DEVICE_ID_EMULATOR) // Enable test ads during development
+                        .build());
+            }
+        });
+
         // Statistics SharedPreferences
-        sharedPrefStatistics = this.getPreferences(Context.MODE_PRIVATE);
+        mSharedPrefStatistics = this.getPreferences(Context.MODE_PRIVATE);
         // Editor Statistics SharedPreferences
-        editorSharedPrefStatistics = sharedPrefStatistics.edit();
+        mEditorSharedPrefStatistics = mSharedPrefStatistics.edit();
 
         // Initializing SharedPreferences file with default values for each Preference
         // The last parameter, false, tells the PreferenceManager to only apply the default values
         // the first time the method is called. (This way it will not overwrite the settings at a later time)
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        table = new Table(NUM_COLS, NUM_ROWS);
-        tableView = findViewById(R.id.gameTable);
+        mTable = new Table(NUM_COLS, NUM_ROWS);
+        mTableView = findViewById(R.id.gameTable);
 
         buildCells();
 
-        tableView.setOnTouchListener(new View.OnTouchListener() {
+        mTableView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
@@ -95,7 +126,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         });
 
         Button resetButton = findViewById(R.id.resetButton);
-        undoButton = findViewById(R.id.undoButton);
+        mUndoButton = findViewById(R.id.undoButton);
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,25 +135,25 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        undoButton.setOnClickListener(new View.OnClickListener() {
+        mUndoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cellForUndo != null) {
-                    cellForUndo.setImageResource(android.R.color.transparent);
-                    table.undoCell(colForUndo, rowForUndo);
+                if (mCellForUndo != null) {
+                    mCellForUndo.setImageResource(android.R.color.transparent);
+                    mTable.undoCell(mColForUndo, mRowForUndo);
                     changeTurn();
-                    cellForUndo = null;
-                    undoButton.setEnabled(false);
+                    mCellForUndo = null;
+                    mUndoButton.setEnabled(false);
                 }
             }
         });
 
-        turnIndicatorImageView = findViewById(R.id.turnIndicatorImageView);
-        turnIndicatorImageView.setImageResource(resourceForTurn());
-        winnerTextView = findViewById(R.id.winnerTextView);
-        winnerTextView.setVisibility(View.GONE);
+        mTurnIndicatorImageView = findViewById(R.id.turnIndicatorImageView);
+        mTurnIndicatorImageView.setImageResource(resourceForTurn());
+        mWinnerTextView = findViewById(R.id.winnerTextView);
+        mWinnerTextView.setVisibility(View.GONE);
 
-        cellFrameColor = getString(R.string.pref_blue_table_color_value);
+        mCellFrameColor = getString(R.string.pref_blue_table_color_value);
 
         setupSharedPreferences();
     }
@@ -162,7 +193,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @param playSound A boolean to know if the user has this function activated
      */
     private void setPlaySound(boolean playSound) {
-        this.playSound = playSound;
+        this.mPlaySound = playSound;
     }
 
     /**
@@ -170,7 +201,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @param vibrate A boolean to know if the user has this function activated
      */
     private void setVibrate(boolean vibrate) {
-        this.vibrate = vibrate;
+        this.mVibrate = vibrate;
     }
 
     /**
@@ -183,10 +214,10 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                 getString(R.string.pref_white_background_color_value));
 
         if (backgroundColor.equals(getString(R.string.pref_white_background_color_value)))
-            tableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
+            mTableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
 
         else
-            tableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
+            mTableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
     }
 
     /**
@@ -205,7 +236,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @param sharedPreferences The SharedPreferences that received the change
      */
     private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
-        table.setColor(getApplicationContext(), sharedPreferences.getString(getString(R.string.pref_color_key),
+        mTable.setColor(getApplicationContext(), sharedPreferences.getString(getString(R.string.pref_color_key),
                 getString(R.string.pref_color_red_value)));
     }
 
@@ -260,21 +291,21 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         switch (item.getItemId()) {
             case R.id.tonality:
                 // Get background color code
-                ColorDrawable viewColor = (ColorDrawable) tableView.getBackground();
+                ColorDrawable viewColor = (ColorDrawable) mTableView.getBackground();
                 int currentColorCode = viewColor.getColor();
 
                 // Toggle the background color
                 if (currentColorCode == ContextCompat.getColor(getApplicationContext(), R.color.colorBlack)) {
-                    tableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
+                    mTableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
                 } else {
-                    tableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
+                    mTableView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBlack));
                 }
 
                 return true;
 
             case R.id.colorFrame:
 
-                setTableColor(cellFrameColor, false);
+                setTableColor(mCellFrameColor, false);
 
                 return true;
 
@@ -295,7 +326,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                         .setNeutralButton("Reset", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                editorSharedPrefStatistics.clear().apply();
+                                mEditorSharedPrefStatistics.clear().apply();
                                 dialog.dismiss();
                                 Toast.makeText(GameActivity.this, "Statistics reseted", Toast.LENGTH_SHORT).show();
                             }
@@ -383,15 +414,15 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
                 } else { // If it's to set the color from Action Bar
 
-                    if (this.cellFrameColor.equals(getString(R.string.pref_blue_table_color_value))) {
+                    if (this.mCellFrameColor.equals(getString(R.string.pref_blue_table_color_value))) {
 
                         cellFrame.setImageResource(R.drawable.cell_frame_gray);
                         finalCellFrameColor = getString(R.string.pref_gray_table_color_value);
 
-                    } else if (this.cellFrameColor.equals(getString(R.string.pref_gray_table_color_value))) {
+                    } else if (this.mCellFrameColor.equals(getString(R.string.pref_gray_table_color_value))) {
 
                         cellFrame.setImageResource(R.drawable.cell_frame_green);
-                        finalCellFrameColor = getString(R.string.pref_green_table_color_value);;
+                        finalCellFrameColor = getString(R.string.pref_green_table_color_value);
 
                     } else {
 
@@ -406,22 +437,22 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
         // Save the new current color
         if (isToSet)
-            this.cellFrameColor = cellFrameColor;
+            this.mCellFrameColor = cellFrameColor;
         else
-            this.cellFrameColor = finalCellFrameColor;
+            this.mCellFrameColor = finalCellFrameColor;
     }
 
     /**
      * Build the cells of the table
      */
     private void buildCells() {
-        cells = new ImageView[NUM_ROWS][NUM_COLS];
+        mCells = new ImageView[NUM_ROWS][NUM_COLS];
 
         for (int r = 0; r < NUM_ROWS; r++) {
 
             // Save each view in a ViewGroup
             // getChildAt(int index): Returns the view at the specified position in the group
-            ViewGroup row = (ViewGroup) ((ViewGroup) tableView).getChildAt(r);
+            ViewGroup row = (ViewGroup) ((ViewGroup) mTableView).getChildAt(r);
 
             // Allows each child to draw outside of its own bounds, within the parent
             row.setClipChildren(false);
@@ -430,7 +461,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
                 ImageView imageView = (ImageView) row.getChildAt(c);
                 imageView.setImageResource(android.R.color.transparent);
-                cells[r][c] = imageView;
+                mCells[r][c] = imageView;
             }
         }
     }
@@ -442,18 +473,18 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     private void drop(int col) {
 
         // Check if there is a winner already
-        if (table.hasWinner)
+        if (mTable.hasWinner)
             return;
 
         // Search an available row
-        int row = table.lastAvailableRow(col);
+        int row = mTable.lastAvailableRow(col);
 
         // Check if the row is full
         if (row == -1)
             return;
 
         // Get the position of the cell that is going to be used
-        final ImageView cell = cells[row][col];
+        final ImageView cell = mCells[row][col];
 
         // How far it will be moved
         float move = -(cell.getHeight() * row + cell.getHeight() + 15);
@@ -468,39 +499,39 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         cell.animate().translationY(0).setInterpolator(new BounceInterpolator()).start();
 
         // Save in the records that this cell is occupied
-        table.occupyCell(col, row);
+        mTable.occupyCell(col, row);
 
         // Keep track the last move for the undo function
-        colForUndo = col;
-        rowForUndo = row;
-        cellForUndo = cells[row][col];
-        undoButton.setEnabled(true);
+        mColForUndo = col;
+        mRowForUndo = row;
+        mCellForUndo = mCells[row][col];
+        mUndoButton.setEnabled(true);
 
         // Check if there is 4 views together
-        if (table.checkForWin()) {
+        if (mTable.checkForWin()) {
             win();
         } else {
             changeTurn();
         }
 
         // Check the user preferences to activate or not the sound
-        if (playSound) {
+        if (mPlaySound) {
             playSound(R.raw.drop_sound);
         }
 
         // Check if the table is full, if it is then, there is a draw
-        if (table.isTableFull()) {
-            undoButton.setEnabled(false);
-            winnerTextView.setVisibility(View.VISIBLE);
-            winnerTextView.setText(getResources().getString(R.string.draw));
+        if (mTable.isTableFull()) {
+            mUndoButton.setEnabled(false);
+            mWinnerTextView.setVisibility(View.VISIBLE);
+            mWinnerTextView.setText(getResources().getString(R.string.draw));
 
             // Check the user preferences to activate or not the sound
-            if (playSound) {
+            if (mPlaySound) {
                 playSound(R.raw.draw_sound);
             }
 
             // Check the user preferences to activate or not the vibration
-            if (vibrate) {
+            if (mVibrate) {
                 vibrate();
             }
         }
@@ -512,8 +543,11 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      */
     private void win() {
 
+        // Increase the number of plays (to show AdMod after)
+        mNumberOfPlays++;
+
         // Check which player has won
-        if (table.turn == Table.Turn.RED) {
+        if (mTable.turn == Table.Turn.RED) {
             delayedDialog();
             writeToSharedPreferences(R.string.sharedPref_red_wins_key);
         } else {
@@ -521,16 +555,16 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             writeToSharedPreferences(R.string.sharedPref_yellow_wins_key);
         }
 
-        winnerTextView.setVisibility(View.VISIBLE);
-        winnerTextView.setText(getResources().getString(R.string.winner));
+        mWinnerTextView.setVisibility(View.VISIBLE);
+        mWinnerTextView.setText(getResources().getString(R.string.winner));
 
         // Check the user preferences to activate or not the sound
-        if (playSound) {
+        if (mPlaySound) {
             playSound(R.raw.winner_sound);
         }
 
         // Check the user preferences to activate or not the vibration
-        if (vibrate) {
+        if (mVibrate) {
             vibrate();
         }
 
@@ -549,8 +583,8 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             wins = readFromSharedPreferences(R.string.sharedPref_yellow_wins_key);
         }
 
-        editorSharedPrefStatistics.putInt(getString(key), ++wins);
-        editorSharedPrefStatistics.apply();
+        mEditorSharedPrefStatistics.putInt(getString(key), ++wins);
+        mEditorSharedPrefStatistics.apply();
 
     }
 
@@ -560,7 +594,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @return The value saved
      */
     private int readFromSharedPreferences(int key) {
-        return sharedPrefStatistics.getInt(getString(key), 0);
+        return mSharedPrefStatistics.getInt(getString(key), 0);
     }
 
     /**
@@ -648,8 +682,8 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * Toggle the turns between players
      */
     private void changeTurn() {
-        table.toggleTurn();
-        turnIndicatorImageView.setImageResource(resourceForTurn());
+        mTable.toggleTurn();
+        mTurnIndicatorImageView.setImageResource(resourceForTurn());
     }
 
     /**
@@ -658,7 +692,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @return The column
      */
     private int colAtX(float x) {
-        float colWidth = cells[0][0].getWidth();
+        float colWidth = mCells[0][0].getWidth();
         int col = (int) x / (int) colWidth;
         if (col < 0 || col > 6)
             return -1;
@@ -670,7 +704,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @return The drawable
      */
     private int resourceForTurn() {
-        switch (table.turn) {
+        switch (mTable.turn) {
             case RED:
                 return R.drawable.red;
             case YELLOW:
@@ -684,7 +718,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @return The drawable
      */
     private int winnerResourceForTurn() {
-        switch (table.turn) {
+        switch (mTable.turn) {
             case RED:
                 return R.drawable.red_won;
             case YELLOW:
@@ -698,13 +732,28 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      */
     private void reset() {
 
-        table.reset();
-        undoButton.setEnabled(false);
-        winnerTextView.setVisibility(View.GONE);
-        turnIndicatorImageView.setImageResource(resourceForTurn());
+        // Show AdMob
+        if (mNumberOfPlays > MIN_PLAYS_NEEDED_ADMOB) {
+
+            // Check for internet connection
+            if (NetworkUtils.isNetworkConnected(this)) {
+
+                if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+
+                    // Clean the number of plays to start again
+                    mNumberOfPlays = 0;
+                }
+            }
+        }
+
+        mTable.reset();
+        mUndoButton.setEnabled(false);
+        mWinnerTextView.setVisibility(View.GONE);
+        mTurnIndicatorImageView.setImageResource(resourceForTurn());
         for (int r = 0; r < NUM_ROWS; r++) {
             for (int c = 0; c < NUM_COLS; c++) {
-                cells[r][c].setImageResource(android.R.color.transparent);
+                mCells[r][c].setImageResource(android.R.color.transparent);
             }
         }
 

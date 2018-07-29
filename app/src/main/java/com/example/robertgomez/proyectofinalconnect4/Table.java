@@ -3,10 +3,10 @@ package com.example.robertgomez.proyectofinalconnect4;
 import android.content.Context;
 
 public class Table {
-    private int numColumns;
-    private int numRows;
+    private int mNumColumns;
+    private int mNumRows;
     public boolean hasWinner;
-    private Cell[][] cells;
+    private Cell[][] mCells;
     private static boolean isRed;
 
     /**
@@ -36,9 +36,9 @@ public class Table {
      * @param rows Number of rows
      */
     public Table(int cols, int rows) {
-        numColumns = cols;
-        numRows = rows;
-        cells = new Cell[cols][rows];
+        mNumColumns = cols;
+        mNumRows = rows;
+        mCells = new Cell[cols][rows];
         reset();
     }
 
@@ -54,9 +54,9 @@ public class Table {
             turn = Turn.YELLOW;
         }
 
-        for (int col = 0; col < numColumns; col++) {
-            for (int row = 0; row < numRows; row++) {
-                cells[col][row] = new Cell();
+        for (int col = 0; col < mNumColumns; col++) {
+            for (int row = 0; row < mNumRows; row++) {
+                mCells[col][row] = new Cell();
             }
         }
     }
@@ -67,8 +67,8 @@ public class Table {
      * @return The row
      */
     public int lastAvailableRow(int col) {
-        for (int row = numRows - 1; row >= 0; row--) {
-            if (cells[col][row].empty) {
+        for (int row = mNumRows - 1; row >= 0; row--) {
+            if (mCells[col][row].empty) {
                 return row;
             }
         }
@@ -81,9 +81,9 @@ public class Table {
      */
     public boolean isTableFull() {
         boolean isFull = true;
-        for (int col = 0; col < numColumns; col++) {
-            for (int row = 0; row < numRows; row++) {
-                if (cells[col][row].empty) {
+        for (int col = 0; col < mNumColumns; col++) {
+            for (int row = 0; row < mNumRows; row++) {
+                if (mCells[col][row].empty) {
                     isFull = false;
                 }
             }
@@ -97,7 +97,7 @@ public class Table {
      * @param row The row
      */
     public void occupyCell(int col, int row) {
-        cells[col][row].setPlayer(turn);
+        mCells[col][row].setPlayer(turn);
     }
 
     /**
@@ -106,7 +106,7 @@ public class Table {
      * @param row The row
      */
     public void undoCell(int col, int row) {
-        cells[col][row] = new Cell();
+        mCells[col][row] = new Cell();
     }
 
     /**
@@ -126,7 +126,7 @@ public class Table {
      */
     public boolean checkForWin() {
         // Vertical
-        for (int col = 0; col < numColumns; col++) {
+        for (int col = 0; col < mNumColumns; col++) {
             if (isTogether(turn, 0, 1, col, 0, 0) || isTogether(turn, 1, 1, col, 0, 0) || isTogether(turn, -1, 1, col, 0, 0)) {
                 hasWinner = true;
                 return true;
@@ -134,8 +134,8 @@ public class Table {
         }
 
         // Horizontal
-        for (int row = 0; row < numRows; row++) {
-            if (isTogether(turn, 1, 0, 0, row, 0) || isTogether(turn, 1, 1, 0, row, 0) || isTogether(turn, -1, 1, numColumns - 1, row, 0)) {
+        for (int row = 0; row < mNumRows; row++) {
+            if (isTogether(turn, 1, 0, 0, row, 0) || isTogether(turn, 1, 1, 0, row, 0) || isTogether(turn, -1, 1, mNumColumns - 1, row, 0)) {
                 hasWinner = true;
                 return true;
             }
@@ -157,11 +157,11 @@ public class Table {
         if (count >= 4) {
             return true;
         }
-        if (col < 0 || col >= numColumns || row < 0 || row >= numRows) {
+        if (col < 0 || col >= mNumColumns || row < 0 || row >= mNumRows) {
             return false;
         }
 
-        Cell cell = cells[col][row];
+        Cell cell = mCells[col][row];
 
         if (cell.player == player) {
             return isTogether(player, dirX, dirY, col + dirX, row + dirY, count + 1);
