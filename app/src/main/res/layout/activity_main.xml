@@ -7,26 +7,26 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/logoConnect4ImageView"
+        android:layout_width="200dp"
+        android:layout_height="155dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/logo_border"
+        android:padding="3dp"
+        android:src="@drawable/logo_connect4" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/logoConnect4ImageView"
-            android:layout_width="200dp"
-            android:layout_height="155dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/logo_border"
-            android:padding="3dp"
-            android:src="@drawable/logo_connect4" />
+        android:layout_weight="1"
+        android:gravity="center">
 
         <Button
             android:id="@+id/playButton"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/logoConnect4ImageView"
-            android:layout_centerInParent="true"
             android:drawableLeft="@drawable/icon_play_button"
             android:text="@string/play" />
 
@@ -35,7 +35,6 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/playButton"
-            android:layout_centerInParent="true"
             android:drawableLeft="@drawable/icon_settings_button"
             android:text="@string/settings" />
 
@@ -44,11 +43,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="1"
         android:gravity="bottom">
 
         <TextView
-            android:id="@+id/proyectoFinalDe"
+            android:id="@+id/finalProjectOf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -58,10 +57,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/proyectoFinalDe"
+            android:layout_below="@id/finalProjectOf"
             android:background="@drawable/logo_altice_academy" />
 
     </RelativeLayout>
-
 
 </LinearLayout>
