@@ -18,7 +18,7 @@ In this project I recreated the game **Connect 4** using what I learned over the
 ![GameActivity](http://oi63.tinypic.com/2i0vrr7.jpg "GameActivity")
 ![Winner](http://oi63.tinypic.com/70ggaa.jpg "Winner")
 ![Statistics](http://oi65.tinypic.com/29olu28.jpg "Statistics")
-![Settings](http://oi66.tinypic.com/nb68tl.jpg "Settings")
+![Settings](http://oi67.tinypic.com/2uh7mfd.jpg "Settings")
 ![About](http://oi68.tinypic.com/1z4wmf7.jpg "About")
 
 ## Thanks
