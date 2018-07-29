@@ -111,7 +111,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                     // Is sent when a finger leaves the screen but at least one finger is still touching it
                     case MotionEvent.ACTION_POINTER_UP:
 
-                    // Is sent when the last finger leaves the screen
+                        // Is sent when the last finger leaves the screen
                     case MotionEvent.ACTION_UP: {
 
                         int col = colAtX(motionEvent.getX()); // getX() returns your coordinates
@@ -315,20 +315,20 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                 int yellowWins = readFromSharedPreferences(R.string.sharedPref_yellow_wins_key);
 
                 AlertDialog.Builder statisticsBuilder = new AlertDialog.Builder(this)
-                        .setTitle("Statistics")
-                        .setMessage("Red Wins: " + redWins + "\nYellow Wins: " + yellowWins)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.statistics))
+                        .setMessage(getString(R.string.red_wins) + " " + redWins + "\n" + getString(R.string.yellow_wins) + " " + yellowWins)
+                        .setPositiveButton(getString(R.string.positive_button), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
-                        .setNeutralButton("Reset", new DialogInterface.OnClickListener() {
+                        .setNeutralButton(getString(R.string.reset), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mEditorSharedPrefStatistics.clear().apply();
                                 dialog.dismiss();
-                                Toast.makeText(GameActivity.this, "Statistics reseted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GameActivity.this, getString(R.string.statistics_reseted), Toast.LENGTH_SHORT).show();
                             }
                         });
                 statisticsBuilder.create().show();
@@ -341,28 +341,28 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
             case R.id.about:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                        .setTitle("About")
-                        .setMessage("Developed by Robert Gomez.\nFinal project of Altice Academy.")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.about_title))
+                        .setMessage(getString(R.string.about_message))
+                        .setPositiveButton(getString(R.string.about_positive_button), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
-                        .setNeutralButton("Contact me", new DialogInterface.OnClickListener() {
+                        .setNeutralButton(getString(R.string.about_neutral_button), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                                 emailIntent.setType("text/plain");
-                                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"rrgt19@gmail.com"});
-                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback for \"Connect 4\" application on Android");
+                                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.about_EXTRA_EMAIL)});
+                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_EXTRA_SUBJECT));
                                 emailIntent.setType("message/rfc822"); // Prompts email client only
 
                                 try {
                                     // Allowing the user to choose which application will handle the Intent
-                                    startActivity(Intent.createChooser(emailIntent, "Send your email in:"));
+                                    startActivity(Intent.createChooser(emailIntent, getString(R.string.about_email_chooser_title)));
                                 } catch (ActivityNotFoundException e) {
-                                    Toast.makeText(GameActivity.this, "There is no email client installed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(GameActivity.this, getString(R.string.about_email_intent_failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -658,7 +658,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         View dialogView = inflater.inflate(R.layout.winner_alert_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        dialogBuilder.setTitle("The winner is");
+        dialogBuilder.setTitle(getString(R.string.winner_dialog_title));
         dialogBuilder.setCancelable(false);
 
         Button resetButton = dialogView.findViewById(R.id.reset_button);

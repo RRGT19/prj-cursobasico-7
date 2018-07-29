@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Connect 4</string>
 
@@ -8,6 +9,23 @@
     <string name="draw">Draw!</string>
     <string name="play">Play</string>
     <string name="settings">Settings</string>
+    <string name="color_frame">Color Frame</string>
+    <string name="tonality">Tonality</string>
+    <string name="final_project_of">Final project of:</string>
+    <string name="statistics">Statistics</string>
+    <string name="red_wins">Red Wins:</string>
+    <string name="yellow_wins">Yellow Wins:</string>
+    <string name="positive_button">Ok</string>
+    <string name="statistics_reseted">Statistics reseted</string>
+    <string name="about_title">About</string>
+    <string name="about_message">Developed by Robert Gomez.\nFinal project of Altice Academy.</string>
+    <string name="about_positive_button">Ok</string>
+    <string name="about_neutral_button">Contact me</string>
+    <string name="about_EXTRA_EMAIL">rrgt19@gmail.com</string>
+    <string name="about_EXTRA_SUBJECT">Feedback for \"Connect 4\" application on Android</string>
+    <string name="about_email_chooser_title">Send your email in:</string>
+    <string name="about_email_intent_failed">There is no email client installed</string>
+    <string name="winner_dialog_title">The winner is</string>
 
     <!-- - - - - - - - - - - - - - - -
           - Functions Preferences  -

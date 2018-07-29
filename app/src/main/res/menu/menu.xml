@@ -4,29 +4,29 @@
 
     <item
         android:id="@+id/tonality"
-        android:title="Tonality"
+        android:title="@string/tonality"
         android:icon="@drawable/icon_tonality_background"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/colorFrame"
-        android:title="colorFrame"
+        android:title="@string/color_frame"
         android:icon="@drawable/icon_color_frame"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/statistics"
-        android:title="Statistics"
+        android:title="@string/statistics"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/settings"
-        android:title="Settings"
+        android:title="@string/settings"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/about"
-        android:title="About"
+        android:title="@string/about_title"
         app:showAsAction="never" />
 
 </menu>
