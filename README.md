@@ -4,12 +4,13 @@ Connect 4 (6x7 “HxW”), final project of Basic Android, Altice Academy, Q3 20
 
 ## Introduction
 
-In this project I recreated the game **Connect 4** using what I learned over the course.
+In this project I have recreated the game **Connect 4** using what I learned over the course.
 
 ## Built With
 
-* [Android Studio](https://developer.android.com/studio/) - Development environment (IDE)
-* Java - Programming language
+* [Android Studio](https://developer.android.com/studio/) - Development Environment (IDE)
+* Java - Programming Language
+* XML - Extensible Markup Language
 
 ## Screenshots
 ![MainActivity](http://oi64.tinypic.com/rh07yq.jpg "MainActivity")
