@@ -24,17 +24,17 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/playButton"
+            android:id="@+id/playWithFriendButton"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/icon_play_button"
-            android:text="@string/play" />
+            android:text="@string/play_with_friend" />
 
         <Button
             android:id="@+id/settingsButton"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/playButton"
+            android:layout_below="@id/playWithFriendButton"
             android:drawableLeft="@drawable/icon_settings_button"
             android:text="@string/settings" />
 
