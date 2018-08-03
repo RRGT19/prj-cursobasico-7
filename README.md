@@ -33,5 +33,5 @@ In this project I have recreated the game **Connect 4** using what I learned ove
 
 ## Thanks
 
-* Thanks to the teacher and students for the support
-* Thanks to Altice Academy for giving me the opportunity
+* The teacher and students for the support.
+* To Altice Academy for giving me the opportunity.
