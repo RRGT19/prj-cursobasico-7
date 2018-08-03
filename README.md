@@ -12,6 +12,12 @@ In this project I have recreated the game **Connect 4** using what I learned ove
 * Java - Programming Language
 * XML - Extensible Markup Language
 
+## Dependencies
+
+* [Preference Support Library](https://developer.android.com/topic/libraries/support-library/packages#v7-preference)
+* [Glide](https://github.com/bumptech/glide)
+* [AdMob](https://developers.google.com/admob/android/quick-start)
+
 ## Screenshots
 ![MainActivity](https://image.ibb.co/na9Kae/mini_Screenshot_1533337815.png "MainActivity")
 ![PlaywithFriend](https://image.ibb.co/mDni1K/mini_Screenshot_1533337834.png "PlaywithFriend")
