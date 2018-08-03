@@ -13,14 +13,16 @@ In this project I have recreated the game **Connect 4** using what I learned ove
 * XML - Extensible Markup Language
 
 ## Screenshots
-![MainActivity](http://oi66.tinypic.com/20p2g6e.jpg "MainActivity")
-![GameActivity](http://oi66.tinypic.com/20p2g6e.jpg "GameActivity")
-![GameActivity](http://oi66.tinypic.com/20p2g6e.jpg "GameActivity")
-![GameActivity](http://oi66.tinypic.com/20p2g6e.jpg "GameActivity")
-![AdMob](http://oi66.tinypic.com/20p2g6e.jpg "AdMob")
-![Statistics](http://oi66.tinypic.com/20p2g6e.jpg "Statistics")
-![Settings](http://oi66.tinypic.com/20p2g6e.jpg "Settings")
-![SettingsOptions](http://oi66.tinypic.com/20p2g6e.jpg "SettingsOptions")
+![MainActivity](https://image.ibb.co/na9Kae/mini_Screenshot_1533337815.png "MainActivity")
+![PlaywithFriend](https://image.ibb.co/mDni1K/mini_Screenshot_1533337834.png "PlaywithFriend")
+![PlaywithFriend2](https://image.ibb.co/njQsve/mini_Screenshot_1533337843.png "PlaywithFriend2")
+![Statistics](https://image.ibb.co/m7Oeae/mini_Screenshot_1533337899.png "Statistics")
+![About](https://image.ibb.co/f6Gzae/mini_Screenshot_1533337917.png "About")
+![Settings](https://image.ibb.co/dnbMoz/mini_Screenshot_1533337903.png "Settings")
+![YellowWins](https://image.ibb.co/hR0E8z/mini_Screenshot_1533337953.png "YellowWins")
+![RedWins](https://image.ibb.co/ejnu8z/mini_Screenshot_1533338029.png "RedWins")
+![MachineWins](https://image.ibb.co/fOK7Tz/mini_Screenshot_1533338001.png "MachineWins")
+![AdMob](https://image.ibb.co/iHrAgK/mini_Screenshot_1533337878.png "AdMob")
 
 ## Thanks
 
