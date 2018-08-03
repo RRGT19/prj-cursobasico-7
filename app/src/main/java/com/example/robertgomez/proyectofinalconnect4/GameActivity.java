@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+
+import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -63,12 +66,19 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     private int mNumberOfPlays = 0;
     private static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"; // Sample
     private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"; // Sample
-    private static final int MIN_PLAYS_NEEDED_ADMOB = 3;
+    private static final int MIN_PLAYS_NEEDED_ADMOB = 2;
+
+    // To know if the user wants to play with the Machine
+    public static boolean withMachine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        // See if the user wants to play with the Machine
+        if (getIntent().getExtras() != null)
+            withMachine = getIntent().getExtras().getBoolean("withMachine");
 
         // AdMob
         MobileAds.initialize(this, ADMOB_APP_ID);
@@ -135,18 +145,20 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        mUndoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCellForUndo != null) {
-                    mCellForUndo.setImageResource(android.R.color.transparent);
-                    mTable.undoCell(mColForUndo, mRowForUndo);
-                    changeTurn();
-                    mCellForUndo = null;
-                    mUndoButton.setEnabled(false);
+        if (!withMachine) {
+            mUndoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mCellForUndo != null) {
+                        mCellForUndo.setImageResource(android.R.color.transparent);
+                        mTable.undoCell(mColForUndo, mRowForUndo);
+                        changeTurn();
+                        mCellForUndo = null;
+                        mUndoButton.setEnabled(false);
+                    }
                 }
-            }
-        });
+            });
+        } else mUndoButton.setVisibility(View.INVISIBLE); // Hide the Undo button while playing with the Machine
 
         mTurnIndicatorImageView = findViewById(R.id.turnIndicatorImageView);
         mTurnIndicatorImageView.setImageResource(resourceForTurn());
@@ -236,8 +248,8 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      * @param sharedPreferences The SharedPreferences that received the change
      */
     private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
-        mTable.setColor(getApplicationContext(), sharedPreferences.getString(getString(R.string.pref_color_key),
-                getString(R.string.pref_color_red_value)));
+        mTable.setColor((sharedPreferences.getString(getString(R.string.pref_color_key),
+                getString(R.string.pref_color_red_value)).equals("red")) ? true : false);
     }
 
     /**
@@ -313,10 +325,13 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                 // Read from shared preferences
                 int redWins = readFromSharedPreferences(R.string.sharedPref_red_wins_key);
                 int yellowWins = readFromSharedPreferences(R.string.sharedPref_yellow_wins_key);
+                int machineWins = readFromSharedPreferences(R.string.sharedPref_machine_wins_key);
 
                 AlertDialog.Builder statisticsBuilder = new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.statistics))
-                        .setMessage(getString(R.string.red_wins) + " " + redWins + "\n" + getString(R.string.yellow_wins) + " " + yellowWins)
+                        .setMessage(getString(R.string.red_wins) + " " + redWins +
+                                "\n" + getString(R.string.yellow_wins) + " " + yellowWins +
+                                "\n" + getString(R.string.machine_wins) + " " + machineWins)
                         .setPositiveButton(getString(R.string.positive_button), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -374,7 +389,13 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    /**
+     * Set a new table color
+     * @param cellFrameColor Value of the color
+     * @param isToSet If it's to set the color from SharedPreferences or from Action Bar
+     */
     private void setTableColor(String cellFrameColor, Boolean isToSet) {
+        Log.i("color", cellFrameColor);
         LinearLayout[] frontTableRowArray = new LinearLayout[] {
                 findViewById(R.id.front_table_row1),
                 findViewById(R.id.front_table_row2),
@@ -501,11 +522,13 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         // Save in the records that this cell is occupied
         mTable.occupyCell(col, row);
 
-        // Keep track the last move for the undo function
-        mColForUndo = col;
-        mRowForUndo = row;
-        mCellForUndo = mCells[row][col];
-        mUndoButton.setEnabled(true);
+        if (!withMachine) {
+            // Keep track the last move for the undo function
+            mColForUndo = col;
+            mRowForUndo = row;
+            mCellForUndo = mCells[row][col];
+            mUndoButton.setEnabled(true);
+        }
 
         // Check if there is 4 views together
         if (mTable.checkForWin()) {
@@ -536,6 +559,91 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
+        // Drop the Machine after 1000 milliseconds
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (withMachine) dropMachine();
+            }
+        }, 1000);
+
+    }
+
+    /**
+     * Drops the image of the Machine at a random column
+     * TODO: Add more complexity to the Machine (Easy, Medium, Hard)
+     */
+    private void dropMachine() {
+        // Use a random number to make the Machine unpredictable
+        Random random = new Random();
+
+        // Formula: .nextInt((max - min) + 1) + min
+        int col = random.nextInt(NUM_ROWS - 0 + 1) + 0; // Between 0 and 6
+
+        // Check if there is a winner already
+        if (mTable.hasWinner)
+            return;
+
+        // Search an available row
+        int row = mTable.lastAvailableRow(col);
+
+        // Check if the row is full
+        if (row == -1)
+            return;
+
+        // Get the position of the cell that is going to be used
+        final ImageView cell = mCells[row][col];
+
+        // How far it will be moved
+        float move = -(cell.getHeight() * row + cell.getHeight() + 15);
+
+        cell.setY(move);
+        cell.setImageResource(resourceForTurn());
+
+        // Drop after 1000 milliseconds
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                cell.animate().translationY(0).setInterpolator(new BounceInterpolator()).start();
+
+                // Check the user preferences to activate or not the sound
+                if (mPlaySound) {
+                    playSound(R.raw.drop_sound);
+                }
+
+
+            }
+        }, 1000);
+
+        // Save in the records that this cell is occupied
+        mTable.occupyCell(col, row);
+
+        // Check if there is 4 views together
+        if (mTable.checkForWin()) {
+            win();
+        } else {
+            changeTurn();
+        }
+
+        // Check if the table is full, if it is then, there is a draw
+        if (mTable.isTableFull()) {
+            mUndoButton.setEnabled(false);
+            mWinnerTextView.setVisibility(View.VISIBLE);
+            mWinnerTextView.setText(getResources().getString(R.string.draw));
+
+            // Check the user preferences to activate or not the sound
+            if (mPlaySound) {
+                playSound(R.raw.draw_sound);
+            }
+
+            // Check the user preferences to activate or not the vibration
+            if (mVibrate) {
+                vibrate();
+            }
+        }
+
     }
 
     /**
@@ -546,13 +654,24 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         // Increase the number of plays (to show AdMod after)
         mNumberOfPlays++;
 
-        // Check which player has won
-        if (mTable.turn == Table.Turn.RED) {
-            delayedDialog();
-            writeToSharedPreferences(R.string.sharedPref_red_wins_key);
-        } else {
-            delayedDialog();
-            writeToSharedPreferences(R.string.sharedPref_yellow_wins_key);
+        if (withMachine) { // If the user is playing with the Machine
+            // Check which player has won
+            if (mTable.turn == Table.Turn.RED) {
+                delayedDialog();
+                writeToSharedPreferences(R.string.sharedPref_red_wins_key);
+            } else {
+                delayedDialog();
+                writeToSharedPreferences(R.string.sharedPref_machine_wins_key);
+            }
+        } else { // If the user is playing with a Friend
+            // Check which player has won
+            if (mTable.turn == Table.Turn.RED) {
+                delayedDialog();
+                writeToSharedPreferences(R.string.sharedPref_red_wins_key);
+            } else {
+                delayedDialog();
+                writeToSharedPreferences(R.string.sharedPref_yellow_wins_key);
+            }
         }
 
         mWinnerTextView.setVisibility(View.VISIBLE);
@@ -579,8 +698,10 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
         int wins;
         if (key == R.string.sharedPref_red_wins_key) {
             wins = readFromSharedPreferences(R.string.sharedPref_red_wins_key);
-        } else {
+        } else if (key == R.string.sharedPref_yellow_wins_key) {
             wins = readFromSharedPreferences(R.string.sharedPref_yellow_wins_key);
+        } else {
+            wins = readFromSharedPreferences(R.string.sharedPref_machine_wins_key);
         }
 
         mEditorSharedPrefStatistics.putInt(getString(key), ++wins);
@@ -709,6 +830,8 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                 return R.drawable.red;
             case YELLOW:
                 return R.drawable.yellow;
+            case MACHINE:
+                return R.drawable.machine;
         }
         return R.drawable.red;
     }
@@ -723,6 +846,8 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                 return R.drawable.red_won;
             case YELLOW:
                 return R.drawable.yellow_won;
+            case MACHINE:
+                return R.drawable.machine_won;
         }
         return R.drawable.red_won;
     }
@@ -757,6 +882,15 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
+    }
+
+    /**
+     * Catch device back button to go to MainActivity
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(GameActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
 }

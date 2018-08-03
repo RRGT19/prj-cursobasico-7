@@ -1,28 +1,25 @@
 package com.example.robertgomez.proyectofinalconnect4;
 
-import android.content.Context;
-
 public class Table {
     private int mNumColumns;
     private int mNumRows;
     public boolean hasWinner;
     private Cell[][] mCells;
-    private static boolean isRed;
+    private boolean isRed;
 
     /**
      * Set the Color of the first player
-     * @param context The ApplicationContext
-     * @param colorKey The key of the preference
+     * @param isRed If it's red or not
      */
-    public static void setColor(Context context, String colorKey) {
-        isRed = (colorKey.equals(context.getString(R.string.pref_color_red_value)));
+    public void setColor(boolean isRed) {
+        this.isRed = isRed;
     }
 
     /**
      * Definition of the players
      */
     public enum Turn {
-        RED, YELLOW
+        RED, YELLOW, MACHINE
     }
 
     /**
@@ -48,10 +45,22 @@ public class Table {
     public void reset() {
         hasWinner = false;
 
+        // TODO: Check why isRed is always false here
+        /*Log.i("color-Reset", Boolean.toString(isRed));
         if (isRed) {
             turn = Turn.RED;
         } else {
             turn = Turn.YELLOW;
+        }*/
+
+        if (GameActivity.withMachine) {
+            turn = Turn.RED; // RED always go first while playing with the Machine
+        } else {
+            if (isRed) {
+                turn = Turn.RED;
+            } else {
+                turn = Turn.YELLOW;
+            }
         }
 
         for (int col = 0; col < mNumColumns; col++) {
@@ -113,10 +122,18 @@ public class Table {
      * Toggle the turns between players
      */
     public void toggleTurn() {
-        if (turn == Turn.RED) {
-            turn = Turn.YELLOW;
-        } else {
-            turn = Turn.RED;
+        if (GameActivity.withMachine) { // If the user wants to play with the Machine
+            if (turn == Turn.RED) {
+                turn = Turn.MACHINE;
+            } else {
+                turn = Turn.RED;
+            }
+        } else { // If the user wants to play with a Friend
+            if (turn == Turn.RED) {
+                turn = Turn.YELLOW;
+            } else {
+                turn = Turn.RED;
+            }
         }
     }
 

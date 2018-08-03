@@ -8,13 +8,18 @@
     <string name="winner">Winner!</string>
     <string name="draw">Draw!</string>
     <string name="play_with_friend">Play with Friend</string>
+    <string name="play_with_machine">Play with Machine</string>
     <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
     <string name="color_frame">Color Frame</string>
     <string name="tonality">Tonality</string>
-    <string name="final_project_of">Final project of:</string>
+    <string name="final_project_of">Final project of</string>
+    <string name="altice_academy">Altice Academy</string>
+    <string name="error_loading_version_name">Error loading version name</string>
     <string name="statistics">Statistics</string>
     <string name="red_wins">Red Wins:</string>
     <string name="yellow_wins">Yellow Wins:</string>
+    <string name="machine_wins">Machine Wins:</string>
     <string name="positive_button">OK</string>
     <string name="statistics_reseted">Statistics reseted</string>
     <string name="about_title">About</string>
@@ -114,5 +119,6 @@
 
     <string name="sharedPref_red_wins_key" translatable="false">red_wins</string>
     <string name="sharedPref_yellow_wins_key" translatable="false">yellow_wins</string>
+    <string name="sharedPref_machine_wins_key" translatable="false">machine_wins</string>
 
 </resources>
