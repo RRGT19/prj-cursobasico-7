@@ -14,6 +14,7 @@ In this project I have recreated the game **Connect 4** using what I learned ove
 
 ## Dependencies
 
+* [AppCompat Library](https://developer.android.com/topic/libraries/support-library/packages#v7-appcompat)
 * [Preference Support Library](https://developer.android.com/topic/libraries/support-library/packages#v7-preference)
 * [Glide](https://github.com/bumptech/glide)
 * [AdMob](https://developers.google.com/admob/android/quick-start)
