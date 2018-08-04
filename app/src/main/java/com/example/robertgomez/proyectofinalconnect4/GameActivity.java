@@ -326,12 +326,14 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
                 int redWins = readFromSharedPreferences(R.string.sharedPref_red_wins_key);
                 int yellowWins = readFromSharedPreferences(R.string.sharedPref_yellow_wins_key);
                 int machineWins = readFromSharedPreferences(R.string.sharedPref_machine_wins_key);
+                int drawWins = readFromSharedPreferences(R.string.sharedPref_draw_key);
 
                 AlertDialog.Builder statisticsBuilder = new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.statistics))
                         .setMessage(getString(R.string.red_wins) + " " + redWins +
                                 "\n" + getString(R.string.yellow_wins) + " " + yellowWins +
-                                "\n" + getString(R.string.machine_wins) + " " + machineWins)
+                                "\n" + getString(R.string.machine_wins) + " " + machineWins +
+                                "\n" + getString(R.string.statistics_draw) + " " + drawWins)
                         .setPositiveButton(getString(R.string.positive_button), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -547,6 +549,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             mUndoButton.setEnabled(false);
             mWinnerTextView.setVisibility(View.VISIBLE);
             mWinnerTextView.setText(getResources().getString(R.string.draw));
+            writeToSharedPreferences(R.string.sharedPref_draw_key);
 
             // Check the user preferences to activate or not the sound
             if (mPlaySound) {
@@ -632,6 +635,7 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
             mUndoButton.setEnabled(false);
             mWinnerTextView.setVisibility(View.VISIBLE);
             mWinnerTextView.setText(getResources().getString(R.string.draw));
+            writeToSharedPreferences(R.string.sharedPref_draw_key);
 
             // Check the user preferences to activate or not the sound
             if (mPlaySound) {
@@ -695,13 +699,23 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
      */
     private void writeToSharedPreferences(int key) {
 
-        int wins;
-        if (key == R.string.sharedPref_red_wins_key) {
-            wins = readFromSharedPreferences(R.string.sharedPref_red_wins_key);
-        } else if (key == R.string.sharedPref_yellow_wins_key) {
-            wins = readFromSharedPreferences(R.string.sharedPref_yellow_wins_key);
-        } else {
-            wins = readFromSharedPreferences(R.string.sharedPref_machine_wins_key);
+        int wins = 0;
+        switch (key) {
+            case R.string.sharedPref_red_wins_key:
+                wins = readFromSharedPreferences(R.string.sharedPref_red_wins_key);
+                break;
+
+            case R.string.sharedPref_yellow_wins_key:
+                wins = readFromSharedPreferences(R.string.sharedPref_yellow_wins_key);
+                break;
+
+            case R.string.sharedPref_machine_wins_key:
+                wins = readFromSharedPreferences(R.string.sharedPref_machine_wins_key);
+                break;
+
+            case R.string.sharedPref_draw_key:
+                wins = readFromSharedPreferences(R.string.sharedPref_draw_key);
+                break;
         }
 
         mEditorSharedPrefStatistics.putInt(getString(key), ++wins);

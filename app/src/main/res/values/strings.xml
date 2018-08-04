@@ -20,6 +20,7 @@
     <string name="red_wins">Red Wins:</string>
     <string name="yellow_wins">Yellow Wins:</string>
     <string name="machine_wins">Machine Wins:</string>
+    <string name="statistics_draw">Draw:</string>
     <string name="positive_button">OK</string>
     <string name="statistics_reseted">Statistics reseted</string>
     <string name="about_title">About</string>
@@ -120,5 +121,6 @@
     <string name="sharedPref_red_wins_key" translatable="false">red_wins</string>
     <string name="sharedPref_yellow_wins_key" translatable="false">yellow_wins</string>
     <string name="sharedPref_machine_wins_key" translatable="false">machine_wins</string>
+    <string name="sharedPref_draw_key" translatable="false">draw</string>
 
 </resources>
