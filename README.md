@@ -29,7 +29,7 @@ In this project I have recreated the game **Connect 4** using what I learned ove
 ![YellowWins](https://image.ibb.co/hR0E8z/mini_Screenshot_1533337953.png "YellowWins")
 ![RedWins](https://image.ibb.co/ejnu8z/mini_Screenshot_1533338029.png "RedWins")
 ![MachineWins](https://image.ibb.co/fOK7Tz/mini_Screenshot_1533338001.png "MachineWins")
-![Draw](https://image.ibb.co/h52xve/Screenshot_1533340056.png "Draw")
+![Draw](https://image.ibb.co/kj2K8z/Screenshot_1533341953.png "Draw")
 ![AdMob](https://image.ibb.co/iHrAgK/mini_Screenshot_1533337878.png "AdMob")
 
 ## Thanks
