@@ -24,7 +24,7 @@ In this project I have recreated the game **Connect 4** using what I learned ove
 ![PlaywithFriend](https://image.ibb.co/mDni1K/mini_Screenshot_1533337834.png "PlaywithFriend")
 ![PlaywithFriend2](https://image.ibb.co/njQsve/mini_Screenshot_1533337843.png "PlaywithFriend2")
 ![Statistics](https://image.ibb.co/kj2K8z/Screenshot_1533341953.png "Statistics")
-![About](https://image.ibb.co/f6Gzae/mini_Screenshot_1533337917.png "About")
+![About](http://oi63.tinypic.com/a9n4ex.jpg "About")
 ![Settings](https://image.ibb.co/dnbMoz/mini_Screenshot_1533337903.png "Settings")
 ![YellowWins](https://image.ibb.co/hR0E8z/mini_Screenshot_1533337953.png "YellowWins")
 ![RedWins](https://image.ibb.co/ejnu8z/mini_Screenshot_1533338029.png "RedWins")
