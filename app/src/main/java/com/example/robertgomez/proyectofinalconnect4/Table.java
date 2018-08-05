@@ -45,22 +45,11 @@ public class Table {
     public void reset() {
         hasWinner = false;
 
-        // TODO: Check why isRed is always false here
-        /*Log.i("color-Reset", Boolean.toString(isRed));
+        // Which player plays first
         if (isRed) {
             turn = Turn.RED;
         } else {
             turn = Turn.YELLOW;
-        }*/
-
-        if (GameActivity.withMachine) {
-            turn = Turn.RED; // RED always go first while playing with the Machine
-        } else {
-            if (isRed) {
-                turn = Turn.RED;
-            } else {
-                turn = Turn.YELLOW;
-            }
         }
 
         for (int col = 0; col < mNumColumns; col++) {

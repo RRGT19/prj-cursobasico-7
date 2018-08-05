@@ -250,11 +250,15 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
     private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
         mTable.setColor((sharedPreferences.getString(getString(R.string.pref_color_key),
                 getString(R.string.pref_color_red_value)).equals("red")) ? true : false);
+
+        // Update the ImageView with the correct Turn
+        mTable.reset();
+        mTurnIndicatorImageView.setImageResource(resourceForTurn());
     }
 
-    /**
-     * Updates the settings if the shared preferences change
-     * This method is required when you make a class implement OnSharedPreferenceChangedListener
+    /**hange
+     * This method is required when you make a class im
+     * Updates the settings if the shared preferences cplement OnSharedPreferenceChangedListener
      * @param sharedPreferences The SharedPreferences that received the change
      * @param key The key of the preference that was changed, added, or removed
      */
@@ -575,7 +579,6 @@ public class GameActivity extends AppCompatActivity implements SharedPreferences
 
     /**
      * Drops the image of the Machine at a random column
-     * TODO: Add more complexity to the Machine (Easy, Medium, Hard)
      */
     private void dropMachine() {
         // Use a random number to make the Machine unpredictable
